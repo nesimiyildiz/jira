@@ -1,50 +1,49 @@
-import React, { useState } from 'react'
+import { useState } from 'react';
 import TaskCreate from './TaskCreate';
+import { useContext } from 'react';
+import TasksContext from '../context/task';
 
-function TaskShow({task,onDelete,onUpdate}) {
-    const [showEdit,setShowEdit]=useState(false);
+function TaskShow({ task }) {
+  const { deleteTaskById, editTaskById } = useContext(TasksContext);
 
-    const {title,taskDesc}=task;
-
-    const handleDeleteClick=()=>{
-        onDelete(task.id)
-    }
-
- const handleEditClick=()=>{
+  const [showEdit, setShowEdit] = useState(false);
+  const handleDeleteClick = () => {
+    // onDelete(task.id);
+    deleteTaskById(task.id);
+  };
+  const handleEditClick = () => {
     setShowEdit(!showEdit);
- }
-     const handleSubmit=(id,updatedTitle,updatedTaskDesc)=>{
+  };
+  const handleSubmit = (id, updatedTitle, updatedTaskDesc) => {
     setShowEdit(false);
-    onUpdate(id,updatedTitle,updatedTaskDesc);
- }
+    // onUpdate(id, updatedTitle, updatedTaskDesc);
 
- 
+    editTaskById(id, updatedTitle, updatedTaskDesc);
+  };
+
+  // console.log(task);
   return (
-    <div className='task-show'>
-        
-        {
-            showEdit?(<TaskCreate task={task} taskFromUpdate={true} onUpdate={handleSubmit}/>):(
-      <div>
-    <h3 className='task-title'>Göreviniz</h3>
-        <p >{title}</p>
-        <h3>Yapılacaklar</h3>
-        <p >{taskDesc}</p>
+    <div className="task-show">
+      {showEdit ? (
+        <TaskCreate task={task} taskformUpdate={true} onUpdate={handleSubmit} />
+      ) : (
         <div>
-            <button className='task-delete' onClick={handleDeleteClick}>Sil</button>
-            <button className='task-edit' onClick={handleEditClick}>Güncelle</button>
+          <h3 className="task-title">Göreviniz</h3>
+          <p>{task.title}</p>
+          <h3 className="task-title">Yapılacaklar</h3>
+          <p>{task.taskDesc}</p>
+          <div>
+            <button className="task-delete" onClick={handleDeleteClick}>
+              Sil
+            </button>
+            <button className="task-edit" onClick={handleEditClick}>
+              Güncelle
+            </button>
+          </div>
         </div>
-        </div>
-            )
-        }
-
-
-
-     
-        
-  
-    
+      )}
     </div>
-  )
+  );
 }
 
-export default TaskShow
+export default TaskShow;
